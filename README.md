@@ -1,4 +1,4 @@
 # assessPrimers
-PCR primer designing and evaluation tool developed in association with the [In Situ Lab](https://insitulabs.org/) initiative.
+A tool to aid PCR primer design and evaluation. Developed in association with the [In Situ Lab](https://insitulabs.org/) initiative.
 
 ## Documentation coming soon
