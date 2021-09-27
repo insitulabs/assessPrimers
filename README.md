@@ -82,3 +82,5 @@ NC_039015.1	PMX1	1
 NC_025363.1	PMX1	1
 NC_025386.1	PMX1	1
 ```
+### mafft_primers.fa
+![Example_alignmant_with_ebi_mViewtool][https://github.com/insitulabs/assessPrimers/blob/main/Example_alignmant_with_ebi_mViewtool.png]
