@@ -31,11 +31,26 @@ Multiple sequence alignment files
 2) Any number of forward and reverse primers can be analyzed, and the current version of this software requires that they be paired.
 
 ## Stepwise Analysis pipeline:
-Reverse-complement reverse primers
-Filter reference sequences with N content > filtN parameter (default = 0.05)
-Make blast database from reference sequence file
-If reference protein sequence has been provided remove references that do not match
-Collapse reference sequences with identity > idcutoff parameter (default = 0.9).
-Create multiple sequence alignment file
-Generate primer and sequence statistics
+1) Reverse-complement reverse primers
+2) Filter reference sequences with N content > filtN parameter (default = 0.05)
+3) Make blast database from reference sequence file
+4) If reference protein sequence has been provided remove references that do not match
+5) Collapse reference sequences with identity > idcutoff parameter (default = 0.9).
+6) Create multiple sequence alignment file
+7) Generate primer and sequence statistics
+
+## Example output
+
+PMX1 coordinate: 3106 entropy: 0.27 numPrimers:32768 GARGGNYNNTGYCARAARNTNTGGAC
+PMX1 captures:
+45 sequences with 0 mismatches
+6 sequences with 1 mismatch(es)
+4 sequences with 2 mismatch(es)
+
+PMX2 coordinate: 3202 entropy: 0.33 numPrimers:65536 GGNGAYAAYCARNYNATWGCNRTNA
+PMX2 captures:
+31 sequences with 0 mismatches
+19 sequences with 1 mismatch(es)
+3 sequences with 2 mismatch(es)
+2 sequences with 3 mismatch(es)
 
