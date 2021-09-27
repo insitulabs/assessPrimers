@@ -19,11 +19,9 @@ Number mismatches: For each primer provided, histogram of the number of mismatch
 
 ### Additional outputs
 
-Sequence statistics text file (tab-delimited)
-Provides the number of mismatches detected for each sequence primer combination
+Sequence statistics text file (tab-delimited): Provides the number of mismatches detected for each sequence primer combination
 
-K-mer statistics text file (tab-delimited)
-For each k-mer along the alignment: coordinate start position, cumulative entropy score, number of gaps, number of non-degenerate primers to match all reference sequences, degenerate consensus sequence, primer name (default name is ‘blank’, unless the k-mer matches one of the input primers)
+K-mer statistics text file (tab-delimited): For each k-mer along the alignment: coordinate start position, cumulative entropy score, number of gaps, number of non-degenerate primers to match all reference sequences, degenerate consensus sequence, primer name (default name is ‘blank’, unless the k-mer matches one of the input primers)
 
 Multiple sequence alignment files
 
