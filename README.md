@@ -26,7 +26,9 @@ K-mer statistics text file (tab-delimited): For each k-mer along the alignment: 
 Multiple sequence alignment files
 
 
-Notes: 1) temporary and in-between outputs are saved to the same location as the final outputs. 2) Any number of forward and reverse primers can be analyzed, and the current version of this software requires that they be paired.
+### Notes
+1) Temporary and in-between outputs are saved to the same location as the final outputs. 
+2) Any number of forward and reverse primers can be analyzed, and the current version of this software requires that they be paired.
 
 ## Stepwise Analysis pipeline:
 Reverse-complement reverse primers
