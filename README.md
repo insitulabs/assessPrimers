@@ -84,4 +84,5 @@ NC_025386.1	PMX1	1
 ```
 ### mafft_primers.fa
 --singleMSA flag is required to include all primers in a single alignment, otherwise separate alignments are created for each primer pair
+
 ![Example_alignmant_with_ebi_mViewtool](Example_alignmant_with_ebi_mViewtool.png)
