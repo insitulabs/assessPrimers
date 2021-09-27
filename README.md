@@ -39,7 +39,8 @@ Multiple sequence alignment files
 6) Create multiple sequence alignment file
 7) Generate primer and sequence statistics
 
-## Example output
+## Example outputs
+### stdout
 ```
 PMX1 coordinate: 3106 entropy: 0.27 numPrimers:32768 GARGGNYNNTGYCARAARNTNTGGAC
 PMX1 captures:
@@ -53,4 +54,31 @@ PMX2 captures:
 19 sequences with 1 mismatch(es)
 3 sequences with 2 mismatch(es)
 2 sequences with 3 mismatch(es)
+```
+### kmer_statistics_primers.txt
+```
+#coordinate	entropy	numGaps	numPrimers	consensusSequence	primerName
+1	0.23	1058	768	NKRARGAGAGTCAMTRDWAC
+2	0.19	1067	192	KRARGAGAGTCAMTRDWACA
+3	0.19	1066	192	RARGAGAGTCAMTRDWACAK
+4	0.19	1059	288	ARGAGAGTCAMTRDWACAKV
+5	0.21	1051	576	RGAGAGTCAMTRDWACAKVY
+6	0.21	1045	864	GAGAGTCAMTRDWACAKVYD
+7	0.26	1039	3456	AGAGTCAMTRDWACAKVYDN
+8	0.29	1031	10368	GAGTCAMTRDWACAKVYDNB
+9	0.32	1023	31104	AGTCAMTRDWACAKVYDNBD
+```
+### sequence_statistics.txt
+```
+#sequence	primer	numMismatches
+NC_025352.1	PMX1	1
+NC_039019.1	PMX1	1
+NC_030231.1	PMX1	1
+NC_001906.3	PMX1	2
+NC_002728.1	PMX1	2
+NC_005084.2	PMX1	2
+NC_005339.1	PMX1	2
+NC_039015.1	PMX1	1
+NC_025363.1	PMX1	1
+NC_025386.1	PMX1	1
 ```
