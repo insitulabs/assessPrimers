@@ -40,7 +40,7 @@ Multiple sequence alignment files
 7) Generate primer and sequence statistics
 
 ## Example output
-
+```
 PMX1 coordinate: 3106 entropy: 0.27 numPrimers:32768 GARGGNYNNTGYCARAARNTNTGGAC
 PMX1 captures:
 45 sequences with 0 mismatches
@@ -53,4 +53,4 @@ PMX2 captures:
 19 sequences with 1 mismatch(es)
 3 sequences with 2 mismatch(es)
 2 sequences with 3 mismatch(es)
-
+```
