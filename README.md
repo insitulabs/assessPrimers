@@ -3,7 +3,7 @@ A tool to aid PCR primer design and evaluation. Developed in association with th
 
 The primer assessment tool requires several inputs including:
 1) List of nucleotide reference sequences
-2) List of forward and reverse primers, respectively (degenerate bases are allowed)
+2) A file of primers (forward and/or reverse)
 3) A reference protein sequence (optional)
 4) Prefix for output files
 
@@ -28,16 +28,15 @@ The inputs are used to create a non-redundant multiple sequence alignment of all
 
 ### Notes
 1) Temporary and in-between outputs are saved to the same location as the final outputs. 
-2) Any number of forward and reverse primers can be analyzed, and the current version of this software requires that they be paired.
+2) There is no limit on the number of primers that may be analyzed (have only tested up to 12 at one time)
 
 ## Stepwise Analysis pipeline:
-1) Reverse-complement reverse primers
-2) Filter reference sequences with N content > filtN parameter (default = 0.05)
-3) Make blast database from reference sequence file
-4) If reference protein sequence has been provided remove references that do not match
-5) Collapse reference sequences with identity > idcutoff parameter (default = 0.9).
-6) Create multiple sequence alignment file
-7) Generate primer and sequence statistics
+1) Filter reference sequences with N content > filtN parameter (default = 0.05)
+2) Make blast database from reference sequence file
+3) If reference protein sequence has been provided remove references that do not match
+4) Collapse reference sequences with identity > idcutoff parameter (default = 0.9).
+5) Create multiple sequence alignment file
+6) Generate primer and sequence statistics
 
 ## Example outputs
 ### stdout
@@ -83,6 +82,6 @@ NC_025363.1	PMX1	1
 NC_025386.1	PMX1	1
 ```
 ### mafft_primers.fa
---singleMSA flag is required to include all primers in a single alignment, otherwise separate alignments are created for each primer pair
+--singleMSA flag is required to include all primers in a single alignment, otherwise separate alignments are created for each primer
 
 ![Example_alignmant_with_ebi_mViewtool](Example_alignmant_with_ebi_mViewtool.png)
