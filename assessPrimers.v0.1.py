@@ -37,7 +37,8 @@ DEG_CODE = {
 	'D': 'AGT',
 	'H': 'ACT',
 	'V': 'ACG',
-	'N': 'ACGT'
+	'N': 'ACGT',
+	'I': 'ACGT'
 }
 
 RC_CODE = {
@@ -132,7 +133,6 @@ def scanEntropy(faFile, outPrefix, output, PRIMER_NAMES, kmer):
 		if seqNamesAll[i] in PRIMER_NAMES:
 			primerName = seqNamesAll[i]
 			primerSeq = seqs[i]
-
 			for j in range(len(primerSeq)):
 				if primerSeq[j] != "-":
 					primerToCoord[primerName] = j
@@ -327,13 +327,18 @@ def filterVirusDb(virusDb, refProtein, outPrefix, refProtOnly):
 	filtVirusFile = open(outPrefix+".01.homologous.fa", 'w')
 	for name,seq in filtVirusDb.iteritems():
 		filtVirusFile.write(">"+name+"\n")
-
 		if refProtOnly:
 			curStats = alignStats[name]
 			start = curStats[0]-201
 			if start < 0: start = 0
 			end = curStats[1]+200
 			if end > len(seq): end = len(seq)
+			
+			if end < start:
+				tmp = start
+				start = end
+				end = tmp
+
 			filtVirusFile.write(seq[start:end]+"\n")
 		else:
 			filtVirusFile.write(seq+"\n")
@@ -364,7 +369,6 @@ def filterN(fasta, outPrefix, filtN):
 
 			##keep track of entry before
 			if name != "": 
-				
 				percN = (numN * 1.0) / length
 				stats[name] = [length, numN, percN, seq]
 				statsFile.write("%s\t%d\t%d\t%0.2f\n" % (name.split()[0].strip(), length, numN, percN))
@@ -408,8 +412,8 @@ def rc(seq):
 def main():
 	parser = argparse.ArgumentParser(description='assessPrimers')
 	parser.add_argument('virusDb', type=str, help='fasta file of all viral sequences (NUCLEOTIDE)')
-	parser.add_argument('f_primers', type=str, help='fasta file of forward primer sequences (5\'->3\' NUCLEOTIDE)')
-	parser.add_argument('r_primers', type=str, help='fasta file of reverse primer sequences (5\'->3\' NUCLEOTIDE)')
+	parser.add_argument('primers', type=str, help='fasta file of primer sequences')
+	#parser.add_argument('r_primers', type=str, help='fasta file of reverse primer sequences (5\'->3\' NUCLEOTIDE)')
 	parser.add_argument('outPrefix', type=str, help='prefix for output files')
 	parser.add_argument('--refProtein', type=str, help='fasta file of reference protein sequence (AMINO ACID)')
 	parser.add_argument('--overwrite', action='store_true', help='by default, this software will use intermediate files if they exist rather than re-run steps. set this flag to overwrite existing intermediate files.')
@@ -419,7 +423,7 @@ def main():
 	parser.add_argument('--filtN', type=float, default=0.05, help='threshold for filtering out sequences with N content higher than filtN. Default is 0.05')
 	parser.add_argument('--refProtOnly', action='store_true', help='If a refProtein is provided, setting this flag will extract only the portion of sequences that align to the refProtein.')
 	parser.add_argument('--idCutoff', type=float, default=0.75, help='sequences with >idCutoff similarity will be collapsed into one representative sequence. default = 0.9')
-	parser.add_argument('--singleMSA', action='store_true', help='flag to align all primers together in a single multiple sequence alignment. default is to align each primer pair separately.')
+	parser.add_argument('--singleMSA', action='store_true', help='flag to align all primers together in a single multiple sequence alignment. default is to align each primer separately.')
 	parser.add_argument('--kmer', type=int, default = 20, help="length of kmer to calculate entropy for")
 	args = parser.parse_args()
 	
@@ -440,12 +444,12 @@ def main():
 	
 
 	F_PRIMERS = []
-	R_PRIMERS = []
+	#R_PRIMERS = []
 	PRIMER_NAMES = []
 
 	#TODO: Make sure primers have no illegal basepairs
 	#STORE PRIMER INFORMATION
-	f_primers = open(args.f_primers, 'r')
+	f_primers = open(args.primers, 'r')
 	name = ""
 	seq = ""
 	for line in f_primers.readlines():
@@ -465,6 +469,8 @@ def main():
 	f_primers.close()
 
 	#print F_PRIMERS	
+	
+	'''
 	#STORE PRIMER INFORMATION
 	r_primers = open(args.r_primers, 'r')
 	name = ""
@@ -486,6 +492,8 @@ def main():
 		#add last entry
 	R_PRIMERS.append([name,rc(seq)])
 	r_primers.close()
+	'''
+	
 	print "\n***************************************************"
 	print "STEP 1: FILTER FOR SEQUENCES WITH HOMOLOGY TO REFERENCE PROTEIN\n"
 
@@ -506,6 +514,12 @@ def main():
 
 	else:
 		print "%s.02.filtN.fa found! Skipping step..." % args.outPrefix
+
+	#check filtN file is not empty
+	filtN = open(args.outPrefix+".02.filtN.fa", 'r').readlines()
+	if len(filtN) == 0:
+		print "\nNo sequences left after removing sequences with high N content! Considering increasing --filtN argument. Exiting..."
+		sys.exit()
 
 	print "\n***************************************************"
 	print "STEP 3: CLUSTER SEQUENCES WITH >%0.2f SIMILARITY. This step may take a while.\n" % args.idCutoff
@@ -531,7 +545,7 @@ def main():
 
 			for i in range(len(F_PRIMERS)):
 				cdhit_primers.write(">%s\n%s\n" % (F_PRIMERS[i][0], F_PRIMERS[i][1]))
-				cdhit_primers.write(">%s\n%s\n" % (R_PRIMERS[i][0], R_PRIMERS[i][1]))
+				#cdhit_primers.write(">%s\n%s\n" % (R_PRIMERS[i][0], R_PRIMERS[i][1]))
 
 			cdhit_primers.close()
 				
@@ -546,10 +560,11 @@ def main():
 	else:
 		print "This step may take a while. If you are testing multiple primers, you can speed up this step by aligning all primers together with the --singleMSA option.\n"
 		for i in range(len(F_PRIMERS)):
+			print "Current primer: "+F_PRIMERS[i][0]
 			curNo = str((i+1))
 			if len(curNo) == 1: curNo = "0"+curNo
-			curPrimer = "primer"+curNo
-			print "Current primer pair: "+curPrimer
+			curPrimer = "primer"+curNo	
+			
 			if args.overwrite or not os.path.exists(args.outPrefix+".04.mafft."+curPrimer+".fa"):	
 					
 				##add primer sequences to cd-hit fasta
@@ -558,7 +573,7 @@ def main():
 				
 				cdhit_primers = open(args.outPrefix+".03.cd-hit."+curPrimer+".fa", 'a')
 				cdhit_primers.write(">%s\n%s\n" % (F_PRIMERS[i][0], F_PRIMERS[i][1]))
-				cdhit_primers.write(">%s\n%s\n" % (R_PRIMERS[i][0], R_PRIMERS[i][1]))
+				#cdhit_primers.write(">%s\n%s\n" % (R_PRIMERS[i][0], R_PRIMERS[i][1]))
 
 				cdhit_primers.close()
 				
@@ -581,9 +596,8 @@ def main():
 		for i in range(len(F_PRIMERS)):	
 			curNo = str((i+1))
 			if len(curNo) == 1: curNo = "0"+curNo
-			curPrimer = "primer"+curNo
-			print "Current primer pair: "+curPrimer
-			
+			curPrimer = "primer"+curNo	
+	
 			scanEntropy(args.outPrefix+".04.mafft."+curPrimer+".fa", args.outPrefix, args.outPrefix+".05.all_kmer_statistics."+curPrimer+".txt", PRIMER_NAMES, args.kmer)
 
 
